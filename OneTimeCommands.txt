@@ -1,0 +1,9 @@
+# Move Window Buttons to left size
+gsettings set org.gnome.desktop.wm.preferences button-layout 'close,minimize,maximize:'
+
+# Move Window Buttons to right size
+gsettings set org.gnome.desktop.wm.preferences button-layout ':close,maximize,minimize'
+
+# hide files in in folder
+echo 'file-to-hide' >> .hidden
+
