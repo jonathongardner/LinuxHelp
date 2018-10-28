@@ -21,10 +21,15 @@ done
 p=${b/\/~/\~}${b+/}$p
 
 # Display user@hostname:pwd process
-echo -ne "\033]0;${USER}@${HOSTNAME}: ${p}\007"
+# echo -ne "\033]0;${USER}@${HOSTNAME}: ${p}\007"
 # Fill in a git status data if in git repo
 mapfile -t l < <(git status --porcelain -b 2> /dev/null)
 # branch, commits ahead, commits behind, uncommitted changes indicator, indicator color
+local psssh=''
+if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+  psssh="\[\e[94m\]$(hostname):"
+fi
+local psst="$psssh\[\e[33m\]$p" psen="\[\e[1;32m\]\$\[\e[0m\] "
 local br="" la="" lb="" lc="" st='0' i
 if [ ${#l} != '0' ]; then
   br=${l[0]:3} && br=${br%...*}
@@ -36,10 +41,10 @@ if [ ${#l} != '0' ]; then
   done
 
   # Set prompt variable with git indicator
-  PS1="\[\e[33m\]$p\[\e[0;35m\][$br\[\e[0;32m\]$la\[\e[1;33m\]$lb\[\e[0m\]\[\e[1;${st}m\]$lc\[\e[0;35m\]]\[\e[1;32m\]\$\[\e[0m\] "
+  PS1="$psst\[\e[0;35m\][$br\[\e[0;32m\]$la\[\e[1;33m\]$lb\[\e[0m\]\[\e[1;${st}m\]$lc\[\e[0;35m\]]\[\e[1;32m\]$psen"
 else
   # Set prompt variable without git indicator
-  PS1="\[\e[33m\]$p\[\e[1;32m\]\$\[\e[0m\] "
+  PS1="$psst$psen"
 fi
 }
 #--------helpful git-------
