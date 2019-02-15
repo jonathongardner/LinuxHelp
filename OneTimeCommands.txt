@@ -7,3 +7,11 @@ gsettings set org.gnome.desktop.wm.preferences button-layout ':close,maximize,mi
 # hide files in in folder
 echo 'file-to-hide' >> .hidden
 
+#---------some git stuff----------
+
+# Find all commits that relate to a file
+git log --full-history -- SOMEFILE
+# Find commit hashes
+git log --reverse --ancestry-path GITHASH^..master
+
+

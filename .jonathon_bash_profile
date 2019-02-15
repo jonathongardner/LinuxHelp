@@ -1,13 +1,20 @@
 # Add following line to bash
 # source ~/Projects/LinuxHelp/.jonathon_bash_profile
 alias GitGraph='git log --graph --decorate --oneline --all'
+GitWhatTheHeckHappened() {
+  git diff $1^ $1
+}
 
 #--------helpful git-------
 PROMPT_COMMAND=set_prompt
 
 function set_prompt {
 # Shorten the path if it's too long (longer than $m)
-local p=$(pwd) b s m=60
+local p=$(pwd) b s m=30 psssh=''
+if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+  psssh="\[\e[94m\]${USER}@$(hostname | cut -d "." -f 1):"
+  m=15
+fi
 p=${p/#$HOME/\~}
 s=${#p}
 while [[ $p != "${p//\/}" ]]&&(($s>$m))
@@ -25,10 +32,6 @@ p=${b/\/~/\~}${b+/}$p
 # Fill in a git status data if in git repo
 mapfile -t l < <(git status --porcelain -b 2> /dev/null)
 # branch, commits ahead, commits behind, uncommitted changes indicator, indicator color
-local psssh=''
-if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
-  psssh="\[\e[94m\]$(hostname):"
-fi
 local psst="$psssh\[\e[33m\]$p" psen="\[\e[1;32m\]\$\[\e[0m\] "
 local br="" la="" lb="" lc="" st='0' i
 if [ ${#l} != '0' ]; then
