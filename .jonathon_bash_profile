@@ -37,22 +37,34 @@ p=${b/\/~/\~}${b+/}$p
 # Display user@hostname:pwd process
 # echo -ne "\033]0;${USER}@${HOSTNAME}: ${p}\007"
 # Fill in a git status data if in git repo
-mapfile -t l < <(git status --porcelain -b 2> /dev/null)
-# branch, commits ahead, commits behind, uncommitted changes indicator, indicator color
-local psst="$psssh\[\e[33m\]$p" psen="\[\e[1;32m\]\$\[\e[0m\] "
-local br="" la="" lb="" lc="" st='0' i
+# mapfile -t l < <(git status --porcelain -b 2> /dev/null)
+while IFS= read -r line; do
+    l+=("$line")
+done < <(git status --porcelain -b 2> /dev/null)
+local psst="$psssh\[\e[39m\]$p" psen="\[\e[1;39m\]\$\[\e[0m\] "
+# br -> branch, la -> local ahead, lb -> local behind, lc -> local commited, lu -> local uncommited, ln -> local new
+local br="" la="" lb="" ln="" lu="" lad="" lc="" i
 if [ ${#l} != '0' ]; then
   br=${l[0]:3} && br=${br%...*}
   la=${l[0]#*[ahead } && la=${la%% *} && [[ ${la:(-1)} != '#' ]] && la=${la:0:${#la}-1} || la=""
   lb=${l[0]#*behind } && lb=${lb%% *} && [[ ${lb:(-1)} != '#' ]] && lb=${lb:0:${#lb}-1} || lb=""
-  st='36'
   for i in "${l[@]:1}"; do
-    [[ "$st" = '31' || ${i:1:1} != ' ' ]] && st='31' && lc='∂' || lc='∂'
+    [[ ${i:1:1} == '?' ]] && ln='N'
+    [[ ${i:1:1} == 'M' ]] && lu='U'
+    [[ ${i:0:1} == 'A' ]] && lad='A'
+    [[ ${i:0:1} == 'M' ]] && lc='C' # ∂
   done
 
-  # Set prompt variable with git indicator
-  PS1="$psst\[\e[0;35m\][$br\[\e[0;32m\]$la\[\e[1;33m\]$lb\[\e[0m\]\[\e[1;${st}m\]$lc\[\e[0;35m\]]\[\e[1;32m\]$psen"
+  unset l
+
   CURRENT_BRANCH="$br"
+  local bashStuff="\[\e[38;5;104m\][$br\[\e[0;32m\]$la\[\e[1;33m\]$lb\[\e[0m\]\[\e[1;91m\]$ln\[\e[1;31m\]$lu\[\e[1;96m\]$lad\[\e[1;36m\]$lc\[\e[38;5;104m\]]\[\e[1;32m\]\e[0m\]"
+  # Set prompt variable with git indicator
+  if [ ${#CURRENT_BRANCH} -ge 10 ]; then
+    PS1="$bashStuff\n$psst$psen"
+  else
+    PS1="$psst$bashStuff$psen"
+  fi
 else
   # Set prompt variable without git indicator
   PS1="$psst$psen"
