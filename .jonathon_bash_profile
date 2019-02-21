@@ -1,6 +1,7 @@
 # Add following line to bash
 # source ~/Projects/LinuxHelp/.jonathon_bash_profile
-alias GitGraph='git log --graph --decorate --oneline --all'
+#----------git-----------
+alias GitGraph='git log --graph --decorate --oneline --all' # --since=1.days || 1.years .... 
 GitWhatTheHeckHappened() {
   git diff $1^ $1
 }
@@ -11,8 +12,34 @@ GitPushToOrigin() {
     git push --set-upstream origin "$CURRENT_BRANCH"
   fi
 }
+#----------git-----------
+
+#----------search/replace-----------
+Replace() {
+  if [ "$#" -eq 2 ]; then
+    find ./ -type f -exec sed -i 's/'$1'/'$2'/g' {} \;
+  else
+    echo "find ./ -type f -exec sed -i 's/$1/$2/g' {} \;"
+  fi
+}
+ReplaceConfirmation() {
+  if [ "$#" -eq 2 ]; then
+    find ./ -type f -exec vi -c 's/'$1'/'$2'/gc' -c 'wq' {} \;
+  else
+    echo "find ./ -type f -exec sed -i 's/$1/$2/g' {} \;"
+  fi
+}
+Rename() {
+  if [[ $# -eq 2 ]]; then
+    find ./ -name '*'$1'*' -exec bash -c 'mv "$0" "${0/'$1'/'$2'}"' {} \;
+  else
+    echo "need 2 argumens ($#) for find ./ -name '*$1*' -exec bash -c 'mv \"$0\" \"${0/$1/$2}\"' {} \;"
+  fi
+}
+#----------search/replace-----------
 
 #--------helpful git-------
+
 PROMPT_COMMAND=set_prompt
 
 function set_prompt {

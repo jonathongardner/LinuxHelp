@@ -6,7 +6,10 @@ gsettings set org.gnome.desktop.wm.preferences button-layout ':close,maximize,mi
 
 # hide files in in folder
 echo 'file-to-hide' >> .hidden
-
+#---------search/replace----------
+grep -rIi --color=always --exclude=*.{file1,...} || --include=*.{file1,...}
+I -> ignore binary files
+i -> case insensitive
 #---------some git stuff----------
 
 # Find all commits that relate to a file
