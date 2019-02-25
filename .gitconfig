@@ -1,0 +1,10 @@
+[alias]
+  co = checkout
+  ci = commit
+  ca = commit --amend
+  st = status
+  br = branch
+  pu = push
+  po = push --set-upstream origin \"$CURRENT_BRANCH\"
+  hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
+  graph = log --graph --decorate --oneline --all
