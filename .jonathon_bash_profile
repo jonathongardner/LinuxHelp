@@ -85,7 +85,7 @@ if [ ${#l} != '0' ]; then
   unset l
 
   CURRENT_BRANCH="$br"
-  local bashStuff="\[\e[38;5;104m\][$br\[\e[0;32m\]$la\[\e[1;33m\]$lb\[\e[0m\]\[\e[1;91m\]$ln\[\e[1;31m\]$lu\[\e[1;96m\]$lad\[\e[1;36m\]$lc\[\e[38;5;104m\]]\[\e[1;32m\]\e[0m\]"
+  local bashStuff="\[\e[38;5;104m\][$br\[\e[0;32m\]$la\[\e[1;33m\]$lb\[\e[0m\]\[\e[1;91m\]$ln\[\e[1;31m\]$lu\[\e[1;96m\]$lad\[\e[1;36m\]$lc\[\e[38;5;104m\]]\[\e[1;32m\]"
   # Set prompt variable with git indicator
   if [ ${#CURRENT_BRANCH} -ge 10 ]; then
     PS1="$bashStuff\n$psst$psen"
