@@ -2,10 +2,16 @@
   co = checkout
   ci = commit
   ca = commit --amend
+  cn = commit --no-verify
   st = status
   br = branch
   pu = push
-  po = push --set-upstream origin \"$CURRENT_BRANCH\"
+  pf = push --force-with-lease
+  po = "!git push --set-upstream origin \"$(git rev-parse --abbrev-ref HEAD)\""
   hs = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
   hd = log -p --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
   gh = log --graph --decorate --oneline --all
+  branch-by-author = for-each-ref --format=' %(authorname) %09 %(refname)' --sort=authorname # get all branches by user
+  prune-origin = remote prune origin # Clear delete origin branches
+[user]
+	name = Jonathon Gardner
