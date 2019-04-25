@@ -1,7 +1,8 @@
 [alias]
   co = checkout
   ci = commit
-  ca = commit --amend
+  ca = commit --amend --no-edit
+  cae = commit --amend
   cn = commit --no-verify
   st = status
   br = branch

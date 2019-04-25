@@ -1,7 +1,7 @@
 # Add following line to bash
 # source ~/Projects/LinuxHelp/.jonathon_bash_profile
 #----------git-----------
-alias GitGraph='git log --graph --decorate --oneline --all' # --since=1.days || 1.years .... 
+alias GitGraph='git log --graph --decorate --oneline --all' # --since=1.days || 1.years ....
 GitWhatTheHeckHappened() {
   git diff $1^ $1
 }
@@ -68,24 +68,32 @@ p=${b/\/~/\~}${b+/}$p
 while IFS= read -r line; do
     l+=("$line")
 done < <(git status --porcelain -b 2> /dev/null)
-local psst="$psssh\[\e[39m\]$p" psen="\[\e[1;39m\]\$\[\e[0m\] "
-# br -> branch, la -> local ahead, lb -> local behind, lc -> local commited, lu -> local uncommited, ln -> local new
-local br="" la="" lb="" ln="" lu="" lad="" lc="" i
+local reset="\[\e[0m\]" b_color="\[\e[38;5;104m\]"
+local psst="$psssh\[\e[39m\]$p$reset" psen="\[\e[1;39m\]\$$reset "
+# br -> branch, la -> local ahead, lb -> local behind
+local br="" la="" lb="" i
+# local ~ uncommited
+# ln -> local new, cn -> commited new, lc -> local change , cc -> commited change, ld -> local deleted, cd -> comitted delete, cr -> commited rename
+local ln="" cn="" lc="" cc="" ld="" cd="" cr=""
 if [ ${#l} != '0' ]; then
   br=${l[0]:3} && br=${br%...*}
   la=${l[0]#*[ahead } && la=${la%% *} && [[ ${la:(-1)} != '#' ]] && la=${la:0:${#la}-1} || la=""
   lb=${l[0]#*behind } && lb=${lb%% *} && [[ ${lb:(-1)} != '#' ]] && lb=${lb:0:${#lb}-1} || lb=""
   for i in "${l[@]:1}"; do
-    [[ ${i:1:1} == '?' ]] && ln='N'
-    [[ ${i:1:1} == 'M' ]] && lu='U'
-    [[ ${i:0:1} == 'A' ]] && lad='A'
-    [[ ${i:0:1} == 'M' ]] && lc='C' # ∂
+    [[ ${i:1:1} == '?' ]] && ln='N' # local new file
+    [[ ${i:0:1} == 'A' ]] && cn='A' # commited new file
+    [[ ${i:1:1} == 'M' ]] && lc='U' # local changes
+    [[ ${i:0:1} == 'M' ]] && cc='C' # commited changes
+    [[ ${i:1:1} == 'D' ]] && ld='D' # local file deleted
+    [[ ${i:0:1} == 'D' ]] && cd='X' # commited file delete
+    [[ ${i:0:1} == 'R' ]] && cr='->' # commited Renamed file (there is not uncommited rename)
+     # ∂
   done
 
   unset l
 
   CURRENT_BRANCH="$br"
-  local bashStuff="\[\e[38;5;104m\][$br\[\e[0;32m\]$la\[\e[1;33m\]$lb\[\e[0m\]\[\e[1;91m\]$ln\[\e[1;31m\]$lu\[\e[1;96m\]$lad\[\e[1;36m\]$lc\[\e[38;5;104m\]]\[\e[1;32m\]"
+  local bashStuff="$b_color[$br\[\e[0;32m\]$la\[\e[1;33m\]$lb$reset\[\e[1;91m\]$ln$lc$ld\[\e[1;96m\]$cn$cc$cd$cr$b_color]$reset"
   # Set prompt variable with git indicator
   if [ ${#CURRENT_BRANCH} -ge 10 ]; then
     PS1="$bashStuff\n$psst$psen"
