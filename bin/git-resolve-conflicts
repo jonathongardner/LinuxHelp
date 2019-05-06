@@ -1,0 +1,128 @@
+#!/usr/bin/env ruby
+
+# frozen_string_literal: true
+class GitConflictResolver
+  attr_reader :conflict_hash
+  GIT_START = '<<<<<<<'
+  GIT_MIDDLE = '======='
+  GIT_END = '>>>>>>>'
+
+  ANSWERS = {
+    'ours' => 0, 'o' => 0, 'theirs' => 1, 't' => 1, 'both' => 2, 'b' => 2,
+    'both-mine' => 3, 'bm' => 3, 'skip' => 4, 's' => 4
+  }
+
+  def initialize(directory)
+    @directory = directory
+  end
+
+  def resolve!
+    files_with_conflicts.each do |file_path|
+      reset_conflict_hash
+      lines = []
+      file_lines_with_index(file_path) do |line, index|
+        lines.push(line) unless conflict?(line)
+        if found_conflict?
+          lines.concat(resolve_conflict("#{file_path}:#{conflict_starting_line(index)}"))
+          reset_conflict_hash
+        end
+      end
+      File.open(file_path, "w+") do |file_write|
+        file_write.puts(lines)
+      end
+    end
+  end
+
+  private
+    def files_with_conflicts
+      results_string = `grep -r '#{GIT_START}' #{@directory}`
+      results_string.split("\n").map { |result| result.split(':')[0] }.uniq
+    end
+
+    def file_lines_with_index(file_path)
+      if File.file?(file_path)
+        File.open(file_path) do |file|
+          index = 1
+          file.each_line do |line|
+            yield(line, index)
+            index += 1
+          end
+        end
+      else
+        puts "Couldnt find #{file_path}"
+      end
+    end
+
+    def reset_conflict_hash
+      @conflict_hash = {}
+    end
+
+    def conflict_lines
+      @conflict_hash.values.flatten
+    end
+
+    def conflict_starting_line(index)
+      1 + index - conflict_lines.length
+    end
+
+    def conflict?(line)
+      if !conflict_hash.key?(:start_header)
+        if line.match?(/#{GIT_START}/)
+          conflict_hash[:start_header] = [line]
+        else
+          return false
+        end
+      elsif !conflict_hash.key?(:middle_header)
+        if line.match?(/#{GIT_MIDDLE}/)
+          conflict_hash[:middle_header] = [line]
+        else
+          (conflict_hash[:our_body] ||= []).push(line)
+        end
+      else
+        if line.match?(/#{GIT_END}/)
+          conflict_hash[:end_header] = [line]
+        else
+          (conflict_hash[:their_body] ||= []).push(line)
+        end
+      end
+      true
+    end
+
+    def found_conflict?
+      conflict_hash.key?(:end_header)
+    end
+
+    def what_is_your_answer?
+      loop do
+        puts "ours, theirs, both, both-mine, skip?"
+        answer = gets.gsub(/[^0-9a-z\- ]/i, '')
+        response = ANSWERS[answer]
+        return response unless response.nil?
+      end
+    end
+
+    def resolve_conflict(location)
+      puts "Found conflict in #{location}"
+      puts "\n"
+      puts conflict_lines.map {|c| "  #{c}"}
+      puts "\n"
+      case what_is_your_answer?
+      when 0
+        puts "Ours!"
+        return conflict_hash[:our_body]
+      when 1
+        puts "Theirs..."
+        return conflict_hash[:their_body]
+      when 2
+        puts "Both?"
+        return conflict_hash[:their_body] + conflict_hash[:our_body]
+      when 3
+        puts "Both... but mine first!"
+        return conflict_hash[:our_body] + conflict_hash[:their_body]
+      else
+        puts "Nothing"
+        return conflict_lines
+      end
+    end
+end
+GitConflictResolver.new(Dir.pwd).resolve!
