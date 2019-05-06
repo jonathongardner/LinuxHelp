@@ -4,6 +4,7 @@ cd "$( dirname "$0" )"
 SCRIPT_DIR="$( dirs -c; dirs )"
 MY_BASH="$SCRIPT_DIR/.jonathon_bash_profile"
 FULL_PATH="$(pwd)"
+MY_BIN="$FULL_PATH/bin"
 MY_GIT_C="$FULL_PATH/.gitconfig"
 
 if [ -f $(eval echo $MY_BASH) ]; then
@@ -11,6 +12,9 @@ if [ -f $(eval echo $MY_BASH) ]; then
     echo "Sourcing $MY_BASH..."
     echo "" >> ~/.bashrc
     echo "source $MY_BASH" >> ~/.bashrc
+    echo "Adding bin ($MY_BIN)..."
+    echo "" >> ~/.bashrc
+    echo "export PATH=\"\$PATH:$MY_BIN\"" >> ~/.bashrc
     echo "Including $MY_GIT_C..."
     echo "[include]" >> ~/.gitconfig
     echo "  path = $MY_GIT_C" >> ~/.gitconfig
@@ -20,4 +24,3 @@ if [ -f $(eval echo $MY_BASH) ]; then
 else
   echo "ERROR: Could not find bash ($MY_BASH)."
 fi
-
