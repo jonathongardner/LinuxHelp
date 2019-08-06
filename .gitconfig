@@ -3,6 +3,7 @@
   ci = commit
   ca = commit --amend --no-edit
   cae = commit --amend
+  can = commit --amend --no-edit --no-verify
   cn = commit --no-verify
   st = status
   br = branch
