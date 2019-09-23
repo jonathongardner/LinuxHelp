@@ -1,0 +1,3 @@
+{
+  "query": "query { images { id name } }"
+}
