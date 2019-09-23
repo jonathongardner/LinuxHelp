@@ -1,5 +1,14 @@
 ## Question 1
 ```ruby
+my_hash['key1'] # => nil
+```
+Whats the difference with string and symbol
+How could you initialize this hash in RAILS so you could access it using string or symbol `HashWithIndifferentAccess`
+Could I do that in ruby?
+
+
+## Question 2
+```ruby
 class User < ApplicationRecord
   ...
   def total_likes
@@ -31,21 +40,17 @@ Small
   - Used `set` & `get` in method name
   - Didnt use SQL method
 
-## Question 2
+## Question 3
 ```ruby
-puts special_method1('this is a test'.split('')) # => special_method1: thisisatest
-puts special_method2('this is a test'.split('')) # => special_method2: this
-puts special_method3('this is a test'.split('')) # => this
-
-puts special_method1('this_is_a_test'.split('')) # => special_method1: this_is_a_test
-puts special_method2('this_is_a_test'.split('')) # => special_method2: this_is_a_test
-puts special_method3('this_is_a_test'.split('')) # => special_method3: this_is_a_test
+special_method([2, 3, 7]) # => some_method: [2, 47, 7]
+special_method([2, 4, 7]) # => some_method: 47
+special_method([2, 5, 7]) # => 47
 ```
  - Next returns the value acc and goes to the next iterable value
  - Break returns the value acc and exits the loop
  - return returns the value and exits the method
 
-## Question 3
+## Question 4
 ```ruby
 puts result1 # => {}
 puts result2 # => {"a"=>"a", "b"=>"b", "c"=>"c", "d"=>"d"}
@@ -59,7 +64,7 @@ end
  - `each_with_object` uses the value acc (so its like a reference)
  - `reduce` uses the value returned (in the case the last line but if next is used will use next value)
 
-## Question 4
+## Question 5
 ```ruby
 options1 # => ["a", "b", {"d"=>"d"}]
 options2 # => {:c=>"c", :e=>"e", :f=>"f"}
