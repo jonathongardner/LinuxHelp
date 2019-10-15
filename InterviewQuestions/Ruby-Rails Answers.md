@@ -2,7 +2,7 @@
 ```ruby
 my_hash['key1'] # => nil
 ```
-Whats the difference with string and symbol
+Whats the difference with string and symbol?
 How could you initialize this hash in RAILS so you could access it using string or symbol `HashWithIndifferentAccess`
 Could I do that in ruby?
 
@@ -46,9 +46,9 @@ special_method([2, 3, 7]) # => some_method: [2, 47, 7]
 special_method([2, 4, 7]) # => some_method: 47
 special_method([2, 5, 7]) # => 47
 ```
- - Next returns the value acc and goes to the next iterable value
- - Break returns the value acc and exits the loop
- - return returns the value and exits the method
+ - `next` returns the value acc and goes to the next iterable value
+ - `break` returns the value acc and exits the loop
+ - `return` returns the value and exits the method
 
 ## Question 4
 ```ruby
@@ -70,3 +70,18 @@ options1 # => ["a", "b", {"d"=>"d"}]
 options2 # => {:c=>"c", :e=>"e", :f=>"f"}
 ```
  - `**` only works with symbols (i.e. `{ **{ c: 'c', 'd' => 'd', e: 'e', f: 'f' } }` will return wrong argument type)
+
+## Question 6
+```ruby
+[some_method(1), some_method(2), some_method(3), some_method(4)].any? {|x| x }
+1
+2
+3
+4
+```
+```ruby
+[1, 2, 3, 4].any? {|x| some_method(x) }
+1
+2
+```
+The first method is evaluated and than the `any?` operator is run, the second evaluates the method in the `any?` so it short circuits. 
