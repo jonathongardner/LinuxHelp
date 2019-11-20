@@ -44,7 +44,12 @@ PROMPT_COMMAND=set_prompt
 
 function set_prompt {
 # Shorten the path if it's too long (longer than $m)
-local p=$(pwd) b s m=30 psssh=''
+local p=$(pwd) b s m=30 psssh='' scr=''
+if [ -n "$STY" ]; then
+  # get the last 'sty.something.something.what-i-want' 'what-i-want'
+  scr="\[\e[96m\][$(echo $STY | rev | cut -d "." -f 1 | rev)]"
+  m=22
+fi
 if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
   psssh="\[\e[94m\]${USER}@$(hostname | cut -d "." -f 1):"
   m=15
@@ -69,7 +74,7 @@ while IFS= read -r line; do
     l+=("$line")
 done < <(git status --porcelain -b 2> /dev/null)
 local reset="\[\e[0m\]" b_color="\[\e[38;5;104m\]"
-local psst="$psssh\[\e[39m\]$p$reset" psen="\[\e[1;39m\]\$$reset "
+local psst="$psssh$scr\[\e[39m\]$p$reset" psen="\[\e[1;39m\]\$$reset "
 # br -> branch, la -> local ahead, lb -> local behind
 local br="" la="" lb="" i
 # local ~ uncommited
