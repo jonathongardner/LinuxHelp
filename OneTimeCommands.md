@@ -29,6 +29,10 @@ gsettings set org.gnome.desktop.wm.preferences button-layout 'close,minimize,max
 # Back
 gsettings set org.gnome.desktop.wm.preferences button-layout ':close,maximize,minimize'
 ```
+#### Move Keep monitors together when changing workspaces
+```BASH
+gsettings set org.gnome.mutter workspaces-only-on-primary false
+```
 
 # MAC
 ### mojave

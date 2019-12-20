@@ -1,0 +1,6 @@
+set number
+syntax on
+set autoindent
+set sw=2
+set hlsearch
+set incsearch
