@@ -80,14 +80,14 @@ if [ ${#l} != '0' ]; then
   la=${l[0]#*[ahead } && la=${la%% *} && [[ ${la:(-1)} != '#' ]] && la=${la:0:${#la}-1} || la=""
   lb=${l[0]#*behind } && lb=${lb%% *} && [[ ${lb:(-1)} != '#' ]] && lb=${lb:0:${#lb}-1} || lb=""
   for i in "${l[@]:1}"; do
-    [[ ${i:1:1} == '?' ]] && ln='🤝️' # local new file
-    [[ ${i:0:1} == 'A' ]] && cn='🤜️' # commited new file
-    [[ ${i:1:1} == 'M' ]] && lc='🤔️' # local changes
-    [[ ${i:0:1} == 'M' ]] && cc='😎️' # commited changes
-    [[ ${i:1:1} == 'D' ]] && ld='😥️' # local file deleted
-    [[ ${i:0:1} == 'D' ]] && cd='🤨️' # commited file delete
-    [[ ${i:0:1} == 'R' ]] && cr='🤯️' # commited Renamed file (there is not uncommited rename)
-    [[ ${i:0:1} == '#' ]] && lcon='😵️' # local conflicts
+    [[ ${i:1:1} == '?' ]] && ln='n' # local new file
+    [[ ${i:0:1} == 'A' ]] && cn='N' # commited new file
+    [[ ${i:1:1} == 'M' ]] && lc='c' # local changes
+    [[ ${i:0:1} == 'M' ]] && cc='C' # commited changes
+    [[ ${i:1:1} == 'D' ]] && ld='d' # local file deleted
+    [[ ${i:0:1} == 'D' ]] && cd='D' # commited file delete
+    [[ ${i:0:1} == 'R' ]] && cr='R' # commited Renamed file (there is not uncommited rename)
+    [[ ${i:0:1} == '#' ]] && lcon='A' # local conflicts
      # ∂
   done
 
