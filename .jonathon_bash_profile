@@ -1,5 +1,6 @@
 # Add following line to bash
 # source ~/Projects/LinuxHelp/.jonathon_bash_profile
+alias myGrep='grep -r --color=always'
 #----------git-----------
 alias GitGraph='git log --graph --decorate --oneline --all' # --since=1.days || 1.years ....
 GitWhatTheHeckHappened() {

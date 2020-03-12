@@ -1,0 +1,18 @@
+# this is for installing aws cli and be able to run cloud-nuke from it
+# after starting the docker
+# run
+# `aws configure`
+# then nuke stuff
+# `cloud-nuke aws`
+# then nuke defaults
+# `cloud-nuke defaults-aws`
+
+FROM python:3.8.2
+
+RUN pip3 install awscli --upgrade --user &&
+  wget https://github.com/gruntwork-io/cloud-nuke/releases/download/v0.1.16/cloud-nuke_linux_amd64 -O /usr/bin/cloud-nuke &&
+  chmod +x /usr/bin/cloud-nuke
+
+ENV PATH="/root/.local/bin:${PATH}"
+
+CMD ["bin/bash"]
