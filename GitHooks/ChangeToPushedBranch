@@ -1,0 +1,25 @@
+#!/usr/local/bin/python3
+# Good post-receive hook
+
+from sys import stdin
+from os import path
+import subprocess
+GIT_DIRECTORY = path.join(path.dirname(path.realpath(__file__)), '../..')
+
+def git(*args):
+    PIPE = subprocess.PIPE
+    process = subprocess.Popen(['git', *args], cwd=GIT_DIRECTORY, stdout=PIPE, stderr=PIPE, env={})
+    stdoutput, stderroutput = process.communicate()
+    if stderroutput:
+        print("ERROR: {0}".format(stderroutput))
+    return stdoutput.decode("utf-8").rstrip()
+branches = []
+for line in stdin:
+    old_commit, new_commit, ref = line.strip().split(' ')
+    branch = ref.split('/')[-1]
+    branches.append({ 'old_commit': old_commit, 'new_commit': new_commit, 'ref': ref, 'branch': branch })
+
+if len(branches) == 1:
+    branch = branches[0]['branch']
+    print('Checking out {0}'.format(branch))
+    git('checkout', '-q', branch)
