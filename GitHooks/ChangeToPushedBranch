@@ -1,4 +1,4 @@
-#!/usr/local/bin/python3
+#!/usr/local/bin/python
 # Good post-receive hook
 
 from sys import stdin
@@ -8,7 +8,9 @@ GIT_DIRECTORY = path.join(path.dirname(path.realpath(__file__)), '../..')
 
 def git(*args):
     PIPE = subprocess.PIPE
-    process = subprocess.Popen(['git', *args], cwd=GIT_DIRECTORY, stdout=PIPE, stderr=PIPE, env={})
+    command = ['git']
+    [command.append(y) for y in args]
+    process = subprocess.Popen(command, cwd=GIT_DIRECTORY, stdout=PIPE, stderr=PIPE, env={})
     stdoutput, stderroutput = process.communicate()
     if stderroutput:
         print("ERROR: {0}".format(stderroutput))
