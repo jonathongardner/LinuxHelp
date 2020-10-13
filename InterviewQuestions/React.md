@@ -1,6 +1,9 @@
 ## Question 1
 What are some of the lifecycles of react?
 What are some of the hooks?
+<details>
+  <summary>Answer</summary>
+
   1. Initialization
     - `getInitialState()`
     - `getDefaultProps()`
@@ -15,15 +18,17 @@ What are some of the hooks?
     - `componentDidUpdate()`
   1. Destruction
     - `componentWillUnmount()`
+</details>
 
 
 
 ## Question 2
 What is JSX?
-  - Raw HTML written in javascript. Some difference with JSX and HTML?
+<details>
+  <summary>Answer</summary>
 
-How can you compile it?
-  - Babel and Webpack
+  Raw HTML written in javascript. Some difference with JSX and HTML?
+</details>
 
 Some JSX got yas
   - https://reactjs.org/docs/jsx-in-depth.html
