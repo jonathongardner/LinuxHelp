@@ -1,0 +1,10 @@
+#!/usr/local/bin/python
+
+POST https://api.github.com/user/keys
+{
+  Accept: 'application/vnd.github.v3+json'
+}
+{
+  title: 'something',
+  key: 'some_key'
+}

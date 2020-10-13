@@ -1,6 +1,0 @@
-{
-  "query": "query($ids: [ID!]) { images(ids: $ids) { id name } }",
-  "variables": {
-    "ids": [2]
-  }
-}
