@@ -1,18 +1,23 @@
 ## Question 1
 ```javascript
-class Pet {
+let createdAt = 'NoDate'
+fetch(`https://api.github.com/users/jonathongardner`).then(response => response.json()).then(data => {
+  // console.log(data)
+  createdAt = data['created_at']
+})
+console.log(`Created At: ${createdAt}`)
+/* =>
+Created At: NoDate
+*/
+```
+
+
+
+## Question 2
+```javascript
+class LivingThing {
   constructor(name) {
     this.name = name
-  }
-  printName () {
-    console.log(this.name)
-  }
-}
-
-class Person {
-  constructor(name, printPetName) {
-    this.name = name
-    this.printPetName = printPetName
   }
   printName () {
     console.log(this.name)
@@ -20,16 +25,35 @@ class Person {
   greetings () {
     console.log('My name is:')
     this.printName()
-    console.log('My pets name is:')
-    this.printPetName()
+  }
+}
+
+class Person extends LivingThing {
+  constructor(name, printPetName = null) {
+    super(name)
+    this.printPetName = printPetName
+  }
+  greetings () {
+    console.log('My name is:')
+    this.printName()
+    if (this.printPetName) {
+      console.log('My pets name is:')
+      this.printPetName()
+    }
   }
 }
 ```
 ```javascript
-const pet = new Pet('Pete')
-const person = new Person('Jacob', pet.printName)
+const peteThePet = new LivingThing('Pete')
+const person = new Person('Jacob', peteThePet.printName)
+
+peteThePet.greetings()
+console.log('----------------')
 person.greetings()
 /* =>
+My name is:
+Pete
+----------------
 My name is:
 Jacob
 My pets name is:
@@ -55,18 +79,3 @@ Whats wrong and how to fix this?
   }
   ```
 </details>
-
-
-
-## Question 2
-```javascript
-let createdAt = 'NoDate'
-fetch(`https://api.github.com/users/jonathongardner`).then(response => response.json()).then(data => {
-  // console.log(data)
-  createdAt = data['created_at']
-})
-console.log(`Created At: ${createdAt}`)
-/* =>
-Created At: NoDate
-*/
-```
