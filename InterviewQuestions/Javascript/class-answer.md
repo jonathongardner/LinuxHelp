@@ -1,19 +1,3 @@
-## Question 1
-```javascript
-let createdAt = 'NoDate'
-fetch(`https://api.github.com/users/jonathongardner`).then(response => response.json()).then(data => {
-  // console.log(data)
-  createdAt = data['created_at']
-})
-console.log(`Created At: ${createdAt}`)
-/* =>
-Created At: NoDate
-*/
-```
-
-
-
-## Question 2
 ```javascript
 class LivingThing {
   constructor(name) {
@@ -61,21 +45,3 @@ Jacob
 */
 ```
 Whats wrong and how to fix this?
-<details>
-  <summary>Answer</summary>
-
-  ```javascript
-  const person = new Person('Jacob', pet.printName.bind(pet))
-  // OR
-  class Pet {
-    ...
-    printName = () => {
-      console.log(this.name)
-    }
-    // BAD too
-    // printName = function printName () {
-    //   console.log(this.name)
-    // }
-  }
-  ```
-</details>
