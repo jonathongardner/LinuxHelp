@@ -1,5 +1,7 @@
-#!/usr/local/bin/python
+#!/usr/bin/env python
 # Good post-receive hook
+# chmod +x post-receive
+# git config receive.denyCurrentBranch updateInstead
 
 from sys import stdin
 from os import path
