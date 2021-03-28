@@ -1,0 +1,39 @@
+#!/usr/bin/env ruby
+require 'optparse'
+require_relative 'github-requests'
+
+#---------set defaults---------
+github = GithubRequest.new('https://api.github.com/')
+args = { name: "#{ENV['USER']}@#{Socket.gethostname}", path: '~/.ssh/id_rsa.pub' }
+
+#---------parse args---------
+OptionParser.new do |opts|
+  opts.banner = "Usage: push-git-public-key [options]"
+  opts.separator ""
+  opts.separator "Optional:"
+
+  opts.on("-t", "--title TITLE", "A descriptive name for the new key (default #{args[:name]})") do |title|
+    args[:title] = title
+  end
+
+  opts.on("-p", "--path PATH", "Path to public key (default #{args[:path]})") do |path|
+    args[:path] = path
+  end
+
+  opts.on("-u USERNAME", "--username USERNAME", 'Username for github') do |username|
+    github.username = username
+  end
+
+  opts.on("--url URL", "Post path for github server (default #{github.uri})", "Must be compatible with application/vnd.github.v3+json") do |url|
+    github.uri = url
+  end
+
+  opts.on("-t", "--token TOKEN", "Github oauth token") do |token|
+    github.token = token
+  end
+end.parse!
+
+path = File.expand_path(args[:path])
+puts "Posting public key from #{path}"
+github.post_keys(key: File.read(path), title: args[:title])
+puts "Successfuly added public key"

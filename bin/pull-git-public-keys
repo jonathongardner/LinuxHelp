@@ -1,0 +1,51 @@
+#!/usr/bin/env ruby
+require 'optparse'
+require_relative 'github-requests'
+
+#---------set defaults---------
+github = GithubRequest.new('https://api.github.com/')
+args = { clear: false, path: '~/.ssh/authorized_keys' }
+
+#---------parse args---------
+OptionParser.new do |opts|
+  opts.banner = "Usage: push-git-public-key [options]"
+  opts.separator ""
+  opts.separator "Optional:"
+
+  opts.on("--clear", 'Clear old authorized keys') do
+    args[:clear] = true
+  end
+
+  opts.on("-p", "--path PATH", "Path to public key (default #{args[:path]})") do |path|
+    args[:path] = path
+  end
+
+  opts.on("-u USERNAME", "--username USERNAME", 'Username for github') do |username|
+    github.username = username
+  end
+
+  opts.on("--url URL", "Post path for github server (default #{github.uri})", "Must be compatible with application/vnd.github.v3+json") do |url|
+    github.uri = url
+  end
+end.parse!
+path = File.expand_path(args[:path])
+keys = github.get_keys
+
+# get keys first so dont clear if error
+if args[:clear]
+  puts "Clearing old authorized keys (#{args[:path]})"
+  File.write(path, '')
+end
+
+other_keys = File.readlines(path).map { |line| line.split(' ')[0..-2].join(' ') }
+
+puts "Already have #{other_keys.count} keys"
+puts "Found #{keys.count} keys"
+File.open(path, 'a') do |file|
+  keys.each do |key|
+    next if other_keys.include?(key['key'])
+
+    puts "Adding #{key['id']}"
+    file.puts("#{key['key']} #{github.username}-#{key['id']}@#{github.host}")
+  end
+end
