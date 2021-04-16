@@ -14,6 +14,8 @@
   hd = log -p --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
   gh = log --graph --decorate --oneline --all
   branch-by-author = for-each-ref --format=' %(authorname) %09 %(refname)' --sort=authorname # get all branches by user
+  find-old-file = log --full-history -- 
   prune-origin = remote prune origin # Clear delete origin branches
+  pr = remote prune # Clear delete origin branches
 [user]
 	name = Jonathon Gardner
