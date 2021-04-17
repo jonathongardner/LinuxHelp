@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+require 'fileutils'
 
 dir = File.expand_path(__dir__)
 MY_BASH = File.join(dir, '.jonathon_bash_profile')
@@ -11,7 +12,8 @@ LOCAL_BASH = File.join(home_dir, '.bashrc')
 LOCAL_VIM = File.join(home_dir, '.vimrc')
 LOCAL_GIT_C = File.join(home_dir, '.gitconfig')
 
-def exist_and_doesnt_already_contain(my, local)
+def exist_and_doesnt_already_contain(my, local, create_local: false)
+  FileUtils.touch(local) if create_local
   return puts("File not found #{my}") unless File.exist?(my)
   return puts("File not found #{local}") unless File.exist?(local)
 
@@ -38,13 +40,13 @@ exist_and_doesnt_already_contain(MY_BIN, LOCAL_BASH) do |file|
   file << "export PATH=\"$PATH:#{MY_BIN}\""
 end
 # vim rc
-exist_and_doesnt_already_contain(MY_VIM, LOCAL_VIM) do |file|
+exist_and_doesnt_already_contain(MY_VIM, LOCAL_VIM, create_local: true) do |file|
   next unless can_i?("Source vmrc")
   puts("Sourcing #{MY_VIM}...")
   file << "source #{MY_VIM}"
 end
 # git config
-exist_and_doesnt_already_contain(MY_GIT_C, LOCAL_GIT_C) do |file|
+exist_and_doesnt_already_contain(MY_GIT_C, LOCAL_GIT_C, create_local: true) do |file|
   next unless can_i?("Include gitconfig")
   puts("Including #{MY_GIT_C}...")
   file << "  path = #{MY_GIT_C}"

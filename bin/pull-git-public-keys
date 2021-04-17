@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 require 'optparse'
+require 'fileutils'
 require_relative 'github-requests'
 
 #---------set defaults---------
@@ -29,6 +30,9 @@ OptionParser.new do |opts|
   end
 end.parse!
 path = File.expand_path(args[:path])
+FileUtils.mkdir_p(File.dirname(path))
+FileUtils.touch(path)
+File.chmod(0600, path)
 keys = github.get_keys
 
 # get keys first so dont clear if error
