@@ -31,23 +31,23 @@ end
 exist_and_doesnt_already_contain(MY_BASH, LOCAL_BASH) do |file|
   next unless can_i?("Source bash rc")
   puts("Sourcing #{MY_BASH}...")
-  file << "source #{MY_BASH}"
+  file.puts("source #{MY_BASH}")
 end
 # bin
 exist_and_doesnt_already_contain(MY_BIN, LOCAL_BASH) do |file|
   next unless can_i?("Export bin")
   puts("Exporing path #{MY_BIN}...")
-  file << "export PATH=\"$PATH:#{MY_BIN}\""
+  file.puts("export PATH=\"$PATH:#{MY_BIN}\"")
 end
 # vim rc
 exist_and_doesnt_already_contain(MY_VIM, LOCAL_VIM, create_local: true) do |file|
   next unless can_i?("Source vmrc")
   puts("Sourcing #{MY_VIM}...")
-  file << "source #{MY_VIM}"
+  file.puts("source #{MY_VIM}")
 end
 # git config
 exist_and_doesnt_already_contain(MY_GIT_C, LOCAL_GIT_C, create_local: true) do |file|
   next unless can_i?("Include gitconfig")
   puts("Including #{MY_GIT_C}...")
-  file << "  path = #{MY_GIT_C}"
+  file.puts("  path = #{MY_GIT_C}")
 end
