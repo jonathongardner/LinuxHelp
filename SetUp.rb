@@ -49,5 +49,6 @@ end
 exist_and_doesnt_already_contain(MY_GIT_C, LOCAL_GIT_C, create_local: true) do |file|
   next unless can_i?("Include gitconfig")
   puts("Including #{MY_GIT_C}...")
+  file.puts("[include]") 
   file.puts("  path = #{MY_GIT_C}")
 end
