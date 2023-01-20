@@ -30,6 +30,7 @@ OptionParser.new do |opts|
   end
 end.parse!
 path = File.expand_path(args[:path])
+raise 'Cant be directory' if File.directory?(path)
 FileUtils.mkdir_p(File.dirname(path))
 FileUtils.touch(path)
 File.chmod(0600, path)
