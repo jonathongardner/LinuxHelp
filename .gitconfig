@@ -1,4 +1,5 @@
 [alias]
+  al = config --get-regexp alias
   co = checkout
   ci = commit
   ca = commit --amend --no-edit
@@ -9,13 +10,15 @@
   br = branch
   pu = push
   pf = push --force-with-lease
-  po = "!git push --set-upstream origin \"$(git rev-parse --abbrev-ref HEAD)\""
-  hs = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
-  hd = log -p --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
-  gh = log --graph --decorate --oneline --all
+  po = "!git push --set-upstream origin \"$(git rev-parse --abbrev-ref HEAD)\"" # push new branch to origin
+  hs = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short # history graph?
+  hd = log -p --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short # history diff?
+  gh = log --graph --decorate --oneline --all # git graph
   branch-by-author = for-each-ref --format=' %(authorname) %09 %(refname)' --sort=authorname # get all branches by user
-  find-old-file = log --full-history -- 
-  prune-origin = remote prune origin # Clear delete origin branches
-  pr = remote prune # Clear delete origin branches
+  find-old-file = log --full-history --
+  prune-origin = remote prune origin # Clear origin branches
+  pr = remote prune # Clear remote passed branches
+  sh = "!f() { git log -S '$2' -- $1; }; f" # search history: look for string ($2) in file ($1) history
+  sl = log --grep # search logs: look for string ($1) in commit text
 [user]
-	name = Jonathon Gardner
+  name = Jonathon Gardner

@@ -1,6 +1,6 @@
 # Add following line to bash
 # source ~/Projects/LinuxHelp/.jonathon_bash_profile
-alias myGrep='grep -r --color=always'
+alias myGrep='grep -r --color=always --exclude=*.{js,map}'
 
 SetPassword() {
   read -s -p "Password: " $1
