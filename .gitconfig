@@ -22,3 +22,5 @@
   sl = log --grep # search logs: look for string ($1) in commit text
 [user]
   name = Jonathon Gardner
+[core]
+  editor = vim
