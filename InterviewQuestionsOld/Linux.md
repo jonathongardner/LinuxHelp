@@ -1,3 +1,0 @@
-- What versions of Linux have you used? Do you have a preference?
-- How would you search for a phrase in multiple files in Linux?
-- How would you connect to a remote server?
