@@ -19,23 +19,26 @@ func Run() error {
 		Usage: "print the version",
 	}
 
-	flags := []cli.Flag{
-		&cli.BoolFlag{
-			Name:    "verbose",
-			Aliases: []string{"v"},
-			Usage:   "logging level",
-		},
-	}
-
 	app := &cli.App{
-		Name:    "starter",
+		Name:    "jelp",
 		Version: app.Version,
-		Usage:   "Example starter app for cli tools!",
+		Usage:   "Command line tool to help setup linux just how i like it.",
 		Commands: []*cli.Command{
 			githubCommand,
 			dotCommand,
 		},
-		Flags: flags,
+		Flags: []cli.Flag{
+			&cli.BoolFlag{
+				Name:    "verbose",
+				Aliases: []string{"v"},
+				Usage:   "logging level",
+			},
+			// &cli.StringFlag{
+			// 	Name:    "path",
+			// 	Aliases: []string{"p"},
+			// 	Usage:   "Project Path",
+			// },
+		},
 		Before: func(c *cli.Context) error {
 			if c.Bool("verbose") {
 				log.SetLevel(log.DebugLevel)
