@@ -1,0 +1,29 @@
+permissions:
+  contents: write
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - setup/version.txt
+name: release-please
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: 1.22.4
+      - name: Build go
+        working-directory: ./setup/
+        run: |
+          go download
+          for arch in amd64, arm64, arm32
+          do
+            GOARCH=$arch go build -o jelp-$GOOS-$arch
+          done
+        env:
+            GOOS: linux
+        
