@@ -3,6 +3,7 @@ package github
 import (
 	"crypto/sha256"
 	"encoding/base64"
+	"encoding/json"
 	"fmt"
 	"path"
 	"strconv"
@@ -27,20 +28,22 @@ func (k key) String() string {
 	return fmt.Sprintf("# sha256:%v imported from github\n%v %v-%v@%v", k.Fingerprint, k.Key, k.api.username, k.ID, k.api.host)
 }
 
-func (k *key) parse() error {
-	code := strings.Split(k.Key, " ")
+func (k *key) parse() (err error) {
+	k.Fingerprint, err = fingerprint(k.Key)
+	return
+}
+
+func fingerprint(key string) (string, error) {
+	code := strings.Split(key, " ")
 	if len(code) <= 1 {
-		return fmt.Errorf("error splinting key")
+		return "", fmt.Errorf("error splinting key")
 	}
 	data, err := base64.StdEncoding.DecodeString(code[1])
 	if err != nil {
-		return fmt.Errorf("error base64 decoding %v", err)
+		return "", fmt.Errorf("error base64 decoding %v", err)
 	}
 	shaBits := sha256.Sum256(data)
-	k.Fingerprint = base64.StdEncoding.EncodeToString(shaBits[:])
-
-	// Digest::SHA256.base64digest(Base64.decode64(key['key'].split(' ')[1]))
-	return nil
+	return base64.StdEncoding.EncodeToString(shaBits[:]), nil
 }
 
 func (a API) SSHKeys() ([]*key, error) {
@@ -53,4 +56,21 @@ func (a API) SSHKeys() ([]*key, error) {
 		}
 	}
 	return toReturn, err
+}
+
+func (a API) SSHSave(key string, title string) (string, error) {
+	fp, err := fingerprint(key)
+	if err != nil {
+		return fp, err
+	}
+
+	toSend := map[string]string{"key": key}
+	if title != "" {
+		toSend["title"] = title
+	}
+	body, err := json.Marshal(toSend)
+	if err != nil {
+		return fp, fmt.Errorf("error marshaling body (%v)", err)
+	}
+	return fp, a.post(path.Join("user", "keys"), body)
 }

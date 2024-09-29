@@ -10,6 +10,7 @@ var githubSSHCommand = &cli.Command{
 	Usage: "Github ssh stuff",
 	Subcommands: []*cli.Command{
 		githubSSHPullCommand,
+		githubSSHPushCommand,
 	},
 }
 
@@ -27,12 +28,12 @@ var githubCommand = &cli.Command{
 			Aliases:  []string{"u"},
 			Required: true,
 			Usage:    "User to pull ssh for",
+			EnvVars:  []string{"GH_USER"},
 		},
 		&cli.StringFlag{
-			Name:     "token",
-			Required: true,
-			Usage:    "Authentication token",
-			EnvVars:  []string{"GH_TOKEN"},
+			Name:    "token",
+			Usage:   "Authentication token",
+			EnvVars: []string{"GH_TOKEN"},
 		},
 	},
 	Subcommands: []*cli.Command{

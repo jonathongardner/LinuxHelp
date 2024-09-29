@@ -1,6 +1,7 @@
 package github
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -34,7 +35,7 @@ func (a API) get(path string, model any) error {
 
 	req.Header.Set("Accept", "application/vnd.github.v3+json")
 	if a.token != "" {
-		return fmt.Errorf("NOT SETUP")
+		req.Header.Set("Authorization", "Bearer "+a.token)
 	}
 
 	client := &http.Client{}
@@ -58,4 +59,41 @@ func (a API) get(path string, model any) error {
 	}
 
 	return nil
+}
+
+func (a API) post(path string, body []byte) error {
+	uri, err := url.JoinPath("https://", a.host, path)
+	if err != nil {
+		return fmt.Errorf("erroring creating url (%v)", err)
+	}
+	log.Debugf("POST: %v %v", uri, a.username)
+
+	req, err := http.NewRequest("POST", uri, bytes.NewBuffer(body))
+	if err != nil {
+		return fmt.Errorf("erroring creating request (%v)", err)
+	}
+
+	req.Header.Set("Accept", "application/vnd.github.v3+json")
+	req.Header.Set("X-GitHub-Api-Version", "2022-11-28")
+	if a.token != "" {
+		req.Header.Set("Authorization", "Bearer "+a.token)
+	}
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return fmt.Errorf("error making api request (%v)", err)
+	}
+
+	if resp.StatusCode < 299 {
+		return nil
+	}
+
+	resBody, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return fmt.Errorf("error reading body (%v)", err)
+	}
+	log.Debugf("error: %v", string(resBody))
+
+	return fmt.Errorf("bad api response (%v)", resp.StatusCode)
 }
