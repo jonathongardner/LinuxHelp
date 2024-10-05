@@ -38,5 +38,6 @@ var githubCommand = &cli.Command{
 	},
 	Subcommands: []*cli.Command{
 		githubSSHCommand,
+		githubCloneCommand,
 	},
 }
