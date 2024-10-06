@@ -35,6 +35,7 @@ func (a API) get(path string, model any) error {
 
 	req.Header.Set("Accept", "application/vnd.github.v3+json")
 	if a.token != "" {
+		log.Debugf("Adding auth headers...")
 		req.Header.Set("Authorization", "Bearer "+a.token)
 	}
 
@@ -76,6 +77,7 @@ func (a API) post(path string, body []byte) error {
 	req.Header.Set("Accept", "application/vnd.github.v3+json")
 	req.Header.Set("X-GitHub-Api-Version", "2022-11-28")
 	if a.token != "" {
+		log.Debugf("Adding auth headers...")
 		req.Header.Set("Authorization", "Bearer "+a.token)
 	}
 
