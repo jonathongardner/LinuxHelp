@@ -42,6 +42,15 @@ Rename() {
     echo "need 2 argumens ($#) for find ./ -name '*$1*' -exec bash -c 'mv \"$0\" \"${0/$1/$2}\"' {} \;"
   fi
 }
+
+function is_toolbox() {
+	if [ -f "/run/.toolboxenv" ]
+	then
+		TOOLBOX_NAME=$(cat /run/.containerenv | grep -E '^name="' | cut -d \" -f 2)
+		echo "${TOOLBOX_NAME}"
+	fi
+}
+TOOLBOX_NAME=`is_toolbox`
 #----------search/replace-----------
 
 #--------helpful git-------
@@ -58,6 +67,10 @@ if [ -n "$STY" ]; then
 fi
 if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
   psssh="\[\e[94m\]${USER}@$(hostname | cut -d "." -f 1):"
+  m=15
+fi
+if [ -n "$TOOLBOX_NAME" ]; then
+  psssh="\e[94m\][${TOOLBOX_NAME}]"
   m=15
 fi
 p=${p/#$HOME/\~}
