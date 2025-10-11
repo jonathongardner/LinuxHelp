@@ -1,0 +1,40 @@
+podman --log-level error create \
+  --cgroupns host \
+  --dns none \
+  --env TOOLBOX_PATH=/usr/bin/toolbox \
+  --env XDG_RUNTIME_DIR=/run/user/1000 \
+  --hostname toolbx \
+  --ipc host \
+  --label com.github.containers.toolbox=true \
+  --mount type=devpts,destination=/dev/pts \
+  --name budy \
+  --network host \
+  --no-hosts \
+  --pid host \
+  --privileged \
+  --security-opt label=disable \
+  --ulimit host \
+  --userns keep-id \
+  --user root:root \
+  --volume /:/run/host:rslave \
+  --volume /dev:/dev:rslave \
+  --volume /run/dbus/system_bus_socket:/run/dbus/system_bus_socket \
+  --volume /var/home/$USER/Documents:/var/home/$USER/Documents:rslave \
+  --volume /usr/bin/toolbox:/usr/bin/toolbox:ro \
+  --volume /run/user/1000:/run/user/1000 \
+  --volume /run/avahi-daemon/socket:/run/avahi-daemon/socket \
+  --volume /run/.heim_org.h5l.kcm-socket:/run/.heim_org.h5l.kcm-socket \
+  --volume /run/pcscd/pcscd.comm:/run/pcscd/pcscd.comm \
+  --volume /run/media:/run/media:rslave \
+  --volume /etc/profile.d/toolbox.sh:/etc/profile.d/toolbox.sh:ro \
+  --memory 256MB \
+  quay.io/toolbx/ubuntu-toolbox:22.04 toolbox \
+  --log-level debug init-container \
+  --gid 1000 \
+  --home /var/home/$USER \
+  --shell /bin/bash \
+  --uid 1000 \
+  --user $USER \
+  --home-link \
+  --media-link \
+  --mnt-link

@@ -1,0 +1,8 @@
+# Use a Fedora base image
+FROM fedora:latest
+
+# Install Python and pip
+RUN dnf update -y && \
+    dnf install -y python3 python3-pip firefox && \
+    dnf clean all && \
+    pip install yt-dlp
