@@ -24,6 +24,7 @@ func Run(version string) error {
 		Commands: []*cli.Command{
 			githubCommand,
 			dotCommand,
+			wolCommand,
 		},
 		Flags: []cli.Flag{
 			&cli.BoolFlag{
