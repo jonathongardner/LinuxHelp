@@ -24,7 +24,7 @@ jobs:
           go mod download
           for arch in amd64 arm64; do
             echo -e "$arch\n"
-            GOARCH=$arch go build -o jest-$GOOS-$arch
+            GOARCH=$arch go build -o jelp-$GOOS-$arch
           done
         env:
             GOOS: linux
@@ -33,7 +33,7 @@ jobs:
       # - name: Update Change Log
       #   run: echo -e "# $(cat setup/version.txt)\n$(cat release.md)\n$(cat CHANGELOG.md)" > CHANGELOG.md
       - name: Create release
-        run: gh release create $(cat setup/version.txt) -F release.md ./setup/jest-*
+        run: gh release create $(cat setup/version.txt) -F release.md ./setup/jelp-*
         env:
           GH_TOKEN: ${{ github.token }}
         
