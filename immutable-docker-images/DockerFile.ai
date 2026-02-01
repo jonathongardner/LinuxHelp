@@ -1,6 +1,7 @@
 FROM registry.fedoraproject.org/fedora-toolbox:latest
-RUN curl -f https://zed.dev/install.sh | sh && \
-  sudo dnf install -y code git-lfs && \
+COPY antigravity.repo /etc/yum.repos.d/antigravity.repo
+RUN sudo dnf makecache && \
+  sudo dnf install -y antigravity git-lfs && \
   curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh | sh -s -- -b $(go env GOPATH)/bin v2.5.0
 
 

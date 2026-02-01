@@ -20,10 +20,17 @@ toolbox rm ytl
 ```
 
 ## Dev
-For dev, contains vscode, golang and git lfs
+For dev, contains zed, golang and git lfs
 ```sh
-podman build -t golang -f DockerFile.dev .
-toolbox create --image localhost/golang:latest golang
+podman build -t dev:dev -f DockerFile.dev .
+toolbox create --image localhost/dev:dev dev
+```
+
+## AI Dev
+For ai dev, contains antigravity, golang and git lfs
+```sh
+podman build -t dev:ai -f DockerFile.ai .
+toolbox create --image localhost/dev:ai dev-ai
 ```
 
 ## ytl
