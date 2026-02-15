@@ -69,21 +69,21 @@ var wolCommand = &cli.Command{
 			}
 		}
 
+		// Build the magic packet.
+		mp, err := wol.New(macAddr)
+		if err != nil {
+			return err
+		}
+
+		// Grab a stream of bytes to send.
+		bs, err := mp.Marshal()
+		if err != nil {
+			return err
+		}
+
 		for _, port := range []string{"7", "9"} {
 			bcastAddr := fmt.Sprintf("%s:%s", "255.255.255.255", port)
 			udpAddr, err := net.ResolveUDPAddr("udp", bcastAddr)
-			if err != nil {
-				return err
-			}
-
-			// Build the magic packet.
-			mp, err := wol.New(macAddr)
-			if err != nil {
-				return err
-			}
-
-			// Grab a stream of bytes to send.
-			bs, err := mp.Marshal()
 			if err != nil {
 				return err
 			}

@@ -7,10 +7,10 @@ import (
 
 // TODO: file opening/touching could be improved/reduced but its fast enough and run once a blue moon so who cares...
 func Export(homedir, project string) error {
-	if err := sourceBashRC(homedir, project); err != nil {
+	if err := exportBin(homedir); err != nil {
 		return err
 	}
-	if err := exportBin(homedir, project); err != nil {
+	if err := sourceBashRC(homedir, project); err != nil {
 		return err
 	}
 	if err := exportGitConfig(homedir, project); err != nil {
@@ -42,12 +42,12 @@ func sourceBashRC(homedir, path string) error {
 	return nil
 }
 
-func exportBin(homedir, path string) error {
+func exportBin(homedir string) error {
 	if !proceed("Export bin") {
 		return nil
 	}
 
-	myBin := filepath.Join(path, "bin")
+	myBin := filepath.Join(homedir, "bin")
 	fmt.Printf("Exporting %v\n", myBin)
 	if err := isDir(myBin); err != nil {
 		return err

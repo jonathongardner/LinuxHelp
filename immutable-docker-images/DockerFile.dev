@@ -1,6 +1,7 @@
 FROM registry.fedoraproject.org/fedora-toolbox:latest
-RUN curl -f https://zed.dev/install.sh | sh && \
-  sudo dnf install -y code git-lfs && \
+RUN sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc && \
+  echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\nautorefresh=1\ntype=rpm-md\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/yum.repos.d/vscode.repo > /dev/null && \
+  sudo dnf install -y code git-lfs golang #\
   curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh | sh -s -- -b $(go env GOPATH)/bin v2.5.0
 
 
